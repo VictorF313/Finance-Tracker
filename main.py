@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 
 # Pandas
+
+# Importing pandas
+
 df = pd.read_excel(
     "/home/sharique/Desktop/Code/Projects/FinanceTracker/BankStatement(Outdated).xlsx"
 )
@@ -17,7 +20,7 @@ st.set_page_config(
 st.title("💵 Finance Dashboard")
 
 
-# Setting streamlit filters data
+# Setting streamlit filters
 
 dateFilter = df[["Transaction Date"]].copy()
 dateFilter["Transaction Date"] = pd.to_datetime(dateFilter["Transaction Date"])
@@ -153,9 +156,21 @@ tableData = (
     tableData.astype({"Credit": "int64", "Debit": "int64"}).set_index("DayOfWeek").T
 )
 
+# Monthly trend
+
+monthlyTrend = df[["Transaction Date", "Credit", "Debit"]].copy()
+monthlyTrend["Transaction Date"] = pd.to_datetime(monthlyTrend["Transaction Date"])
+monthlyTrend["MonthIndex"] = monthlyTrend["Transaction Date"].dt.month
+monthlyTrend["Month"] = monthlyTrend["Transaction Date"].dt.month_name
+monthlyTrend = monthlyTrend.pivot_table(
+    index=["Month", "MonthIndex"], values=["Credit", "Debit"], aggfunc="sum"
+).reset_index()
+
+monthlyTrend = monthlyTrend.sort_values(by="MonthIndex")
+monthlyTrend["NetCashFlow"] = monthlyTrend["Credit"] - monthlyTrend["Debit"]
 
 # Streamlit
-# Setting dataframe
+# Setting KPIs
 
 with st.container(vertical_alignment="center"):
     # Setting metric cards for credit and debit
@@ -167,7 +182,7 @@ with st.container(vertical_alignment="center"):
             border=True,
             delta="N/A",
             delta_arrow="off",
-            chart_data=pivot_credit["Credit"],
+            chart_data=monthlyTrend["Credit"],
             chart_type="area",
         )
         b.metric(
@@ -177,7 +192,7 @@ with st.container(vertical_alignment="center"):
             delta="N/A",
             delta_arrow="off",
             delta_color="red",
-            chart_data=pivot_debit["Debit"],
+            chart_data=monthlyTrend["Debit"],
             chart_type="area",
         )
 
@@ -187,7 +202,7 @@ with st.container(vertical_alignment="center"):
                 value=netCashFlow,
                 border=True,
                 delta=f"{netCashFlowPercent}%",
-                chart_data=netCashFlowPercent,
+                chart_data=monthlyTrend["NetCashFlow"],
                 chart_type="area",
             )
         elif netCashFlow > 0:
@@ -197,7 +212,7 @@ with st.container(vertical_alignment="center"):
                 value=netCashFlow,
                 border=True,
                 delta=f"{netCashFlowPercent}%",
-                chart_data=netCashFlowPercent,
+                chart_data=monthlyTrend["NetCashFlow"],
                 chart_type="area",
             )
         else:
@@ -207,9 +222,10 @@ with st.container(vertical_alignment="center"):
                 border=True,
                 width=200,
                 delta=f"{netCashFlowPercent}%",
-                chart_data=netCashFlowPercent,
+                chart_data=monthlyTrend["NetCashFlow"],
                 chart_type="area",
             )
+
     # Setting graphs for credit and debit
 
     with st.container(
@@ -268,6 +284,7 @@ with st.container(vertical_alignment="center"):
             ),
             width=150,
         )
+
         heatmap = px.imshow(
             daywiseTransactons,
             height=300,
