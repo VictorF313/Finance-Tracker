@@ -120,13 +120,13 @@ transactions = df[["Transaction Date", "Credit", "Debit"]].copy()
 transactions = transactions.astype(
     {"Transaction Date": "datetime64[ns]", "Credit": "float64", "Debit": "float64"}
 )
+
 transactions["Credit"] = transactions["Credit"].fillna(0)
 transactions["Debit"] = transactions["Debit"].fillna(0)
 
 daywiseTransactons = transactions.pivot_table(
     index="Transaction Date", values=["Credit", "Debit"], aggfunc="sum"
 ).reset_index()
-
 
 daywiseTransactons["WeekDay"] = daywiseTransactons["Transaction Date"]
 daywiseTransactons["DayOfWeek"] = daywiseTransactons["WeekDay"].dt.day_name()
@@ -161,7 +161,7 @@ tableData = (
 monthlyTrend = df[["Transaction Date", "Credit", "Debit"]].copy()
 monthlyTrend["Transaction Date"] = pd.to_datetime(monthlyTrend["Transaction Date"])
 monthlyTrend["MonthIndex"] = monthlyTrend["Transaction Date"].dt.month
-monthlyTrend["Month"] = monthlyTrend["Transaction Date"].dt.month_name
+monthlyTrend["Month"] = monthlyTrend["Transaction Date"].dt.month_name()
 monthlyTrend = monthlyTrend.pivot_table(
     index=["Month", "MonthIndex"], values=["Credit", "Debit"], aggfunc="sum"
 ).reset_index()
@@ -170,9 +170,13 @@ monthlyTrend = monthlyTrend.sort_values(by="MonthIndex")
 monthlyTrend["NetCashFlow"] = monthlyTrend["Credit"] - monthlyTrend["Debit"]
 
 # Streamlit
+
+# Creating Tabs
+tab1, tab2 = st.tabs(["📈 Charts", "📑 Data"])
+
 # Setting KPIs
 
-with st.container(vertical_alignment="center"):
+with tab1.container(vertical_alignment="center"):
     # Setting metric cards for credit and debit
     with st.container(border=True, horizontal=True, horizontal_alignment="distribute"):
         a, b, c = st.columns([1, 1, 1])
@@ -295,4 +299,18 @@ with st.container(vertical_alignment="center"):
             aspect="auto",
         )
         st.plotly_chart(heatmap)
-        st.dataframe(tableData)
+
+
+# Setting Data Tab
+
+tab2.subheader("Monthwise Cashflow Details")
+tab2.dataframe(monthlyTrend[["Month", "Credit", "Debit", "NetCashFlow"]])
+
+tab2.subheader("Categorywise Credit")
+tab2.dataframe(credit)
+
+tab2.subheader("Categorywise Debit")
+tab2.dataframe(debit)
+
+tab2.subheader("Day Wise Transaction Amounts (Credit & Debit)")
+tab2.dataframe(tableData)
