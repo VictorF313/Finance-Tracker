@@ -14,7 +14,6 @@ if uploadedFile is not None:
     df = pd.read_excel(uploadedFile)
 
     # Setting streamlit Dashboard
-
     st.set_page_config(
         layout="wide",
         page_title="📊 Finance Dashboard",
@@ -308,6 +307,8 @@ if uploadedFile is not None:
 
     tab2.subheader("Day Wise Transaction Amounts (Credit & Debit)")
     tab2.dataframe(tableData)
+
+# Else condition if file is not uploaded
 else:
     st.subheader("Upload your bank statement to view the analysis")
     st.caption("Supported format: Excel(.xlsx)")
