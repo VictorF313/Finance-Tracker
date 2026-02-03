@@ -276,15 +276,9 @@ with tab1.container(vertical_alignment="center"):
             "Select Color Palette",
             (
                 "aggrnyl",
-                "agsunset",
-                "algae",
                 "blues",
-                "blackbody",
-                "bluered",
                 "blugrn",
-                "bupu",
                 "teal",
-                "sunsetdark",
             ),
             width=150,
         )
