@@ -6,12 +6,11 @@ import pandas as pd
 # Pandas
 
 # File uploader
-uploadedFile = st.file_uploader("Upload Excel", type=["xlsx"])
-
+uploadedFile = st.file_uploader("Upload File", type=["xlsx"])
 
 # Importing  file in pandas
 
-if uploadedFile:
+if uploadedFile is not None:
     df = pd.read_excel(uploadedFile)
 
     # Setting streamlit Dashboard
@@ -310,4 +309,5 @@ if uploadedFile:
     tab2.subheader("Day Wise Transaction Amounts (Credit & Debit)")
     tab2.dataframe(tableData)
 else:
-    st.subheader("Please upload bank statement to render the analysis")
+    st.subheader("Upload your bank statement to view the analysis")
+    st.caption("Supported format: Excel(.xlsx)")
