@@ -67,7 +67,7 @@ if uploadedFile is not None:
 
     # Mapping category of payments in df["Category"] column
 
-    df["Category"] = df["Category"].map(
+    df["Category"] = df["Category"].replace(
         {
             "ATM": "ATM Withdrawal",
             "UPI": "UPI Transaction",
