@@ -7,8 +7,8 @@ import pandas as pd
 
 # File uploader
 
-tab1, tab2 = st.tabs(["Dashboard", "Upload File"])
-with tab2.container():
+tab1, tab2 = st.tabs(["Upload File", "Dashboard"])
+with tab1.container():
     uploadedFile = st.file_uploader(
         "Upload your bank statement to get insights",
         type=["xlsx"],
@@ -16,7 +16,7 @@ with tab2.container():
 
 # Importing  file in pandas
 
-with tab1.container():
+with tab2.container():
     if uploadedFile is not None:
         df = pd.read_excel(uploadedFile)
 
