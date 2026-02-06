@@ -47,6 +47,7 @@ with tab2.container():
                 format="DD/MM/YYYY",
             )
 
+        # Validating both dates are selected or not
         if len(timeframe) == 2:
 
             timeframe = pd.DataFrame([timeframe])
