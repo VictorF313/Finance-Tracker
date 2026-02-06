@@ -12,7 +12,7 @@ tab1, tab2 = st.tabs(["Upload File", "Dashboard"])
 
 
 # Setting template
-data = ["Transaction Date", "Value Date", "Particulars", "Debit", "Credit"]
+data = ["Transaction Date", "Particulars", "Debit", "Credit"]
 template = pd.DataFrame(data)
 template = template.T
 
@@ -32,12 +32,13 @@ with tab1.container():
         data=buffer,
         file_name="Template.xlsx",
         icon=":material/download:",
+        width=400,
     )
 
     uploadedFile = col2.file_uploader(
         "Upload your bank statement to get insights",
         type=["xlsx", "csv"],
-        width=400,
+        width=600,
     )
 
 # Importing  file in pandas
@@ -93,7 +94,6 @@ with tab2.container():
             )
 
         # Data cleaning & pre processing
-        df = df.drop("Value Date", axis=1)  # Removing the Value Date column
         df["Category"] = np.nan
         df["Category"] = (
             df["Particulars"].str[0:3].str.strip()
