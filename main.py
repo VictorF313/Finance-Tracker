@@ -32,7 +32,7 @@ with tab1.container():
         data=buffer,
         file_name="Template.xlsx",
         icon=":material/download:",
-        width=400,
+        width=250,
     )
 
     uploadedFile = col2.file_uploader(
