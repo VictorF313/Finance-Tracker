@@ -4,7 +4,21 @@ import numpy as np
 import pandas as pd
 from io import BytesIO
 
-# Pandas
+# Setting streamlit Dashboard
+st.set_page_config(
+    layout="wide",
+    page_title="📊 Finance Dashboard",
+    initial_sidebar_state="expanded",
+)
+st.title("💵 Finance Dashboard")
+
+
+# Setting Credit Section
+
+col5, col6 = st.columns([1, 0.5])
+with col5.container():
+    st.badge("Crafted by VictorF313 (Sharique)", icon=":material/build:", color="green")
+
 
 # File uploader
 
@@ -25,6 +39,7 @@ with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
 buffer.seek(0)
 
 with tab1.container():
+
     col1, col2 = st.columns([1, 1])
     col1.write("Download Template")
     col1.download_button(
@@ -36,7 +51,7 @@ with tab1.container():
     )
 
     uploadedFile = col2.file_uploader(
-        "Upload your bank statement to get insights",
+        "Upload your bank statement",
         type=["xlsx", "csv"],
         width=600,
     )
@@ -46,14 +61,6 @@ with tab1.container():
 with tab2.container():
     if uploadedFile is not None:
         df = pd.read_excel(uploadedFile)
-
-        # Setting streamlit Dashboard
-        st.set_page_config(
-            layout="wide",
-            page_title="📊 Finance Dashboard",
-            initial_sidebar_state="expanded",
-        )
-        st.title("💵 Finance Dashboard")
 
         # Setting streamlit filters
 
