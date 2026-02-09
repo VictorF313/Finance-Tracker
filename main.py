@@ -13,16 +13,9 @@ st.set_page_config(
 st.title("💵 Finance Dashboard")
 
 
-# Setting Credit Section
-
-col5, col6 = st.columns([1, 0.5])
-with col5.container():
-    st.badge("Crafted by VictorF313 (Sharique)", icon=":material/build:", color="green")
-
-
 # File uploader
 
-tab1, tab2 = st.tabs(["Upload File", "Dashboard"])
+tab1, tab2, tab3 = st.tabs(["Upload File", "Dashboard", "About"])
 
 
 # Setting template
@@ -34,7 +27,7 @@ template = template.T
 buffer = BytesIO()
 
 with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
-    template.to_excel(writer, index=False, sheet_name="Template")
+    template.to_excel(writer, header=False, index=False, sheet_name="Template")
 
 buffer.seek(0)
 
@@ -59,7 +52,9 @@ with tab1.container():
 # Importing  file in pandas
 
 with tab2.container():
+
     if uploadedFile is not None:
+
         df = pd.read_excel(uploadedFile)
 
         # Setting streamlit filters
@@ -178,7 +173,7 @@ with tab2.container():
             index="DayOfWeek", values=["Credit", "Debit"], aggfunc="sum"
         ).reset_index()
 
-        daywiseTransactons["DayIndex"] = daywiseTransactons["DayOfWeek"].map(
+        daywiseTransactons["DayIndex"] = daywiseTransactons["DayOfWeek"].replace(
             {
                 "Monday": 1,
                 "Tuesday": 2,
@@ -219,11 +214,11 @@ with tab2.container():
         # Streamlit
 
         # Creating Tabs
-        tab3, tab4 = st.tabs(["📈 Charts", "📑 Data"])
+        tab4, tab5 = st.tabs(["📈 Charts", "📑 Data"])
 
         # Setting KPIs
 
-        with tab3.container(vertical_alignment="center"):
+        with tab4.container(vertical_alignment="center"):
             # Setting metric cards for credit and debit
             with st.container(
                 border=True, horizontal=True, horizontal_alignment="distribute"
@@ -345,14 +340,17 @@ with tab2.container():
 
         # Setting Data Tab
 
-        tab4.subheader("Monthwise Cashflow Details")
-        tab4.dataframe(monthlyTrend[["Month", "Credit", "Debit", "NetCashFlow"]])
+        tab5.subheader("Monthwise Cashflow Details")
+        tab5.dataframe(monthlyTrend[["Month", "Credit", "Debit", "NetCashFlow"]])
 
-        tab4.subheader("Categorywise Credit")
-        tab4.dataframe(credit)
+        tab5.subheader("Categorywise Credit")
+        tab5.dataframe(credit)
 
-        tab4.subheader("Categorywise Debit")
-        tab4.dataframe(debit)
+        tab5.subheader("Categorywise Debit")
+        tab5.dataframe(debit)
 
-        tab4.subheader("Day Wise Transaction Amounts (Credit & Debit)")
-        tab4.dataframe(tableData)
+        tab5.subheader("Day Wise Transaction Amounts (Credit & Debit)")
+        tab5.dataframe(tableData)
+
+with tab3.container():
+    st.subheader("🛠️  Crafted by VictorF313 (Sharique)")
