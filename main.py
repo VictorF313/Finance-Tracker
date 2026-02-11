@@ -40,13 +40,13 @@ with tab1.container():
         data=buffer,
         file_name="Template.xlsx",
         icon=":material/download:",
-        width=250,
+        width=280,
     )
 
     uploadedFile = col2.file_uploader(
         "Upload your bank statement",
         type=["xlsx", "csv"],
-        width=600,
+        width=550,
     )
 
 # Importing  file in pandas
@@ -325,6 +325,7 @@ with tab2.container():
                         "teal",
                     ),
                     width=150,
+                    index=3,
                 )
 
                 heatmap = px.imshow(
@@ -353,5 +354,7 @@ with tab2.container():
         tab5.dataframe(tableData)
 
 with tab3.container():
-    st.subheader("Made with  ♥️")
-    st.subheader("🛠️  Crafted by VictorF313 (Sharique)")
+    col3, col4 = st.columns([1, 4])
+    col3.image("https://avatars.githubusercontent.com/u/129792251?v=4", width=200)
+    col4.subheader("")
+    col4.subheader("🛠️  Crafted by VictorF313 (Sharique)")
