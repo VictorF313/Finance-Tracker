@@ -354,7 +354,4 @@ with tab2.container():
         tab5.dataframe(tableData)
 
 with tab3.container():
-    col3, col4 = st.columns([1, 5])
-    col3.image("https://avatars.githubusercontent.com/u/129792251?v=4", width=150)
-    col4.subheader("")
-    col4.subheader("🛠️  Crafted by VictorF313 (Sharique)")
+    st.subheader("🛠️  Crafted by VictorF313 (Sharique)")
