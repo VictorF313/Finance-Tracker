@@ -354,4 +354,4 @@ with tab2.container():
         tab5.dataframe(tableData)
 
 with tab3.container():
-    st.subheader("🛠️  Crafted by VictorF313 (Sharique)")
+    st.subheader("🛠️  Crafted by VictorF313(Sharique)")
